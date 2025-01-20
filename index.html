@@ -8,8 +8,27 @@
         body { margin: 0; overflow: hidden; }
         /* canvas { display: block; } */
     </style>
+    <style>
+  #infoPanel {
+    position: fixed;  /* Закрепляем панель */
+    bottom: 10px;     /* Располагаем панель снизу */
+    left: 10px;       /* Смещаем влево */
+    max-width: 300px; /* Ограничиваем ширину */
+    white-space: pre-line;  /* Сохраняем переносы строк */
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);  /* Полупрозрачный фон */
+    color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+      </style>
+      <div id="infoPanel"></div>
 </head>
 <body>
+    <script src="https://raw.githubusercontent.com/evanw/csg.js/master/csg.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script type="module" src="main.js"></script>
 
 </body>
