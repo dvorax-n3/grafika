@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { FlyControls } from 'three/addons/controls/FlyControls.js';
+import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
 
 
 
@@ -46,7 +46,8 @@ texture_wall.wrapS = THREE.RepeatWrapping; // rysowanie tekstury od poczatku
 texture_wall.wrapT = THREE.RepeatWrapping; 
 texture_wall.anisotropy = 16;
 
-const wall_geometry = new THREE.BoxGeometry(50,7,1);
+const wall_geometry = new THREE.BoxGeometry(30,7,1);
+const wall_geometry2 = new THREE.BoxGeometry(36.2,7,1);
 const wall_materials = new THREE.MeshStandardMaterial({map: texture_wall});
 const wall = new THREE.Mesh(wall_geometry,wall_materials);
 scene.add(wall);
@@ -60,13 +61,13 @@ wall1.position.y=3.5;
 wall1.position.z=-18;
 wall1.name = 'wall 1';
 
-const wall2 = new THREE.Mesh(wall_geometry,wall_materials);
+const wall2 = new THREE.Mesh(wall_geometry2,wall_materials);
 scene.add(wall2);
 wall2.position.y=3.5;
 wall2.position.x=-15;
 wall2.rotation.y=-Math.PI / 2;
 
-const wall3 = new THREE.Mesh(wall_geometry,wall_materials);
+const wall3 = new THREE.Mesh(wall_geometry2,wall_materials);
 scene.add(wall3);
 wall3.position.y=3.5;
 wall3.position.x=15;
@@ -78,8 +79,8 @@ wall3.name = 'wall 3';
 
 
 const wall_geometry1 = new THREE.BoxGeometry(15,2.5,1);
-const texture_wall1 = new THREE.TextureLoader().load('img/wall2.jpg');
-texture_wall1.repeat.set( 1,0); // powtarzanie tekstury 
+const texture_wall1 = new THREE.TextureLoader().load('img/wall3.jpg');
+texture_wall1.repeat.set( 3,1); // powtarzanie tekstury 
 texture_wall1.wrapS = THREE.RepeatWrapping; // rysowanie tekstury od poczatku
 texture_wall1.wrapT = THREE.RepeatWrapping; 
 texture_wall1.anisotropy = 16;
@@ -97,11 +98,11 @@ scene.add(wall5);
 wall5.position.y=1.25;
 wall5.position.x=9.5;
 
-const wall6 = new THREE.Mesh(wall_geometry,wall_materials);
+const wall6 = new THREE.Mesh(wall_geometry,wall_materials1);
 scene.add(wall6);
 wall6.position.y=6;
 
-wall6.position.x=9.5;
+
 
 
 
@@ -182,7 +183,7 @@ const tabPainting = [];
 
 for (var i=0; i<tabNazwa.length; i++)
 {
-    tabPainting[i]=createFramedPainting(tabNazwa[i], tabRozmiar[i][0], tabRozmiar[i][1], 0.1, 0x8B4513);
+    tabPainting[i]=createPainting(tabNazwa[i], tabRozmiar[i][0], tabRozmiar[i][1], 0.1, 0x8B4513);
     tabPainting[i].position.set(tabPostion[i][0],tabPostion[i][1],tabPostion[i][2]);
     tabPainting[i].rotation.y=tabPostion[i][3];
     tabPainting[i].scale.set(1.5,1.5,1);
@@ -308,12 +309,14 @@ const tabLightPictures=[];
 
 
 
-const controls = new FlyControls(camera, renderer.domElement);
-controls.movementSpeed = 1;
-controls.dragToLook = true;
-controls.rollSpeed = 0.1;
+const controls = new FirstPersonControls(camera, renderer.domElement);
+controls.noFly=true;
+controls.movementSpeed = 0.5;
+controls.lookSpeed = 0.02;
 
-camera.position.y = 1.6; // Высота камеры
+
+
+
 
 
 
@@ -322,7 +325,7 @@ function colision(){
     if (camera.position.z > 17) camera.position.z-=1;
     if (camera.position.x < -14) camera.position.x+=1;
     if (camera.position.x > 14) camera.position.x-=1;
-   // if (camera.position.y < 1.6) camera.position.y=1.6;
+  
 
     if ((camera.position.z > -0.7 && camera.position.z < 0.7 && camera.position.x < -2) || (camera.position.z > -0.7 && camera.position.z < 0.7 && camera.position.x > 2))
     {
@@ -332,6 +335,7 @@ function colision(){
     
     if (!isDoorOpen && camera.position.z<0.9 && camera.position.z>0)  camera.position.z+=1;
     if (!isDoorOpen && camera.position.z>-0.6 && camera.position.z<0)  camera.position.z-=0.5;
+    camera.position.y=1.6;
 }
 
 
@@ -376,16 +380,16 @@ function showInfoPanel(info) {
 }
 
 
-function createFramedPainting(paintingTextureUrl, frameWidth, frameHeight, frameThickness, frameColor) {
+function createPainting(paintingTextureUrl, frameWidth, frameHeight, frameThickness, frameColor) {
     const frameMaterial = new THREE.MeshStandardMaterial({ color: frameColor });
     
     // Горизонтальные части рамки
-    const horizontalFrameGeometry = new THREE.BoxGeometry(frameWidth + frameThickness, frameThickness, frameThickness);
+    const horizontalFrameGeometry = new THREE.BoxGeometry(frameWidth , frameThickness, frameThickness);
     const topFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
     const bottomFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
     
     // Вертикальные части рамки
-    const verticalFrameGeometry = new THREE.BoxGeometry(frameThickness, frameHeight + frameThickness, frameThickness);
+    const verticalFrameGeometry = new THREE.BoxGeometry(frameThickness, frameHeight , frameThickness);
     const leftFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
     const rightFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
     
