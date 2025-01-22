@@ -3,16 +3,15 @@ import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.j
 
 
 const startScreen = document.getElementById('startScreen');
-        const startButton = document.getElementById('startButton');
-        
-        startButton.addEventListener('click', () => {
-            startScreen.style.display = 'none';  // Скрываем экран старта
-            museum();  // Запускаем сцену
-        });
+const startButton = document.getElementById('startButton');
+
+startButton.addEventListener('click', () => {
+    startScreen.style.display = 'none';  // Скрываем экран старта
+    museum();  // Запускаем сцену
+});
 
 
-function museum()
-{
+function museum() {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -20,9 +19,38 @@ function museum()
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Создание геометрии и материала для объектов
+  
 
     camera.position.set(0, 0, 5);
+    const listener = new THREE.AudioListener();
+    camera.add(listener);  // Добавление слушателя к камере
+
+    const soundOpen = new THREE.Audio(listener);
+    const soundClose = new THREE.Audio(listener);
+
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load('sounds/open.mp3', function (buffer) {
+        soundOpen.setBuffer(buffer);
+        soundOpen.setLoop(false);  // Не зацикливать
+        soundOpen.setVolume(0.4);  // Громкость от 0 до 1
+    });
+
+    audioLoader.load('sounds/close.mp3', function (buffer) {
+        soundClose.setBuffer(buffer);
+        soundClose.setLoop(false);
+        soundClose.setVolume(0.4);
+    });
+
+    const museumMusic =  new THREE.Audio(listener);
+    audioLoader.load('sounds/museum.mp3', function (buffer) {
+        museumMusic.setBuffer(buffer);
+        museumMusic.setLoop(true);  
+        museumMusic.setVolume(0.6);  // Громкость от 0 до 1
+        museumMusic.play();
+    });
+   
+
+
 
     const texture_floor = new THREE.TextureLoader().load('img/Floor.jpg');
     texture_floor.repeat.set(10, 7); // powtarzanie tekstury 
@@ -339,126 +367,133 @@ function museum()
 
     animate();
 
-
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-
-function showInfoPanel(info) {
-    const panel = document.getElementById('infoPanel');
-    panel.textContent = info.replace(/\n/g, '\n');  // Обработка символов переноса строки
-    panel.style.display = 'block';
-    setTimeout(() => panel.style.display = 'none', 10000);  // Скрыть через 10 секунд
-}
+    
 
 
-function createPainting(paintingTextureUrl, frameWidth, frameHeight, frameThickness, frameColor) {
-    const frameMaterial = new THREE.MeshStandardMaterial({ color: frameColor });
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
 
-    // Горизонтальные части рамки
-    const horizontalFrameGeometry = new THREE.BoxGeometry(frameWidth, frameThickness, frameThickness);
-    const topFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
-    const bottomFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
-
-    // Вертикальные части рамки
-    const verticalFrameGeometry = new THREE.BoxGeometry(frameThickness, frameHeight, frameThickness);
-    const leftFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
-    const rightFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
-
-    // Позиционирование частей рамки
-    topFrame.position.set(0, frameHeight / 2 + frameThickness / 2, 0);
-    bottomFrame.position.set(0, -frameHeight / 2 - frameThickness / 2, 0);
-    leftFrame.position.set(-frameWidth / 2 - frameThickness / 2, 0, 0);
-    rightFrame.position.set(frameWidth / 2 + frameThickness / 2, 0, 0);
-
-    // Картина
-    const paintingTexture = new THREE.TextureLoader().load(paintingTextureUrl);
-    const paintingMaterial = new THREE.MeshStandardMaterial({ map: paintingTexture });
-    const paintingGeometry = new THREE.PlaneGeometry(frameWidth, frameHeight);
-    const painting = new THREE.Mesh(paintingGeometry, paintingMaterial);
-    painting.position.set(0, 0, frameThickness / 2);
-
-    // Группа для рамки и картины
-    const frameGroup = new THREE.Group();
-    frameGroup.add(topFrame, bottomFrame, leftFrame, rightFrame, painting);
-
-    return frameGroup;
-}
-
-function createDoor() {
-    const geometry_glass = new THREE.PlaneGeometry(2, 2.5);  // Размер стекла
-    const material_glass = new THREE.MeshStandardMaterial({
-        color: 0x00ff00,  // Зеленый цвет
-        opacity: 0.3,  // Полупрозрачность
-        transparent: true  // Включаем поддержку прозрачности
-    });
-    const glass = new THREE.Mesh(geometry_glass, material_glass);
-    const glass1 = new THREE.Mesh(geometry_glass, material_glass);
-    glass.position.set(0, 1.25, 0.025);
-    glass1.position.set(0, 1.25, -0.025);
-    glass1.rotation.y = Math.PI;
-
-
-    // Создание рамки двери
-    const frameMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
-
-    const horizontalFrameGeometry = new THREE.BoxGeometry(2, 0.1, 0.1);
-    const topFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
-    const bottomFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
-    topFrame.position.set(0, 2.45, 0);
-    bottomFrame.position.set(0, 0.05, 0);
-
-    const verticalFrameGeometry = new THREE.BoxGeometry(0.1, 2.5, 0.1);
-    const leftFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
-    const rightFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
-    leftFrame.position.set(-1, 1.25, 0);
-    rightFrame.position.set(1, 1.25, 0);
-
-    // Группировка стекла и рамки
-    const doorGroup = new THREE.Group();
-    doorGroup.add(glass, glass1, topFrame, bottomFrame, leftFrame, rightFrame);
-    scene.add(doorGroup);
-
-    doorGroup.position.x = -1;
-    return doorGroup;
-}
-
-window.addEventListener('keydown', (event) => {
-    if (event.key === 'o') isDoorOpen = !isDoorOpen;
-});
-
-window.addEventListener('click', (event) => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(scene.children, true);  // true для поиска во вложенных объектах
-
-    if (intersects.length > 0) {
-        let selectedObject = intersects[0].object;
-
-        // Поиск имени объекта в иерархии
-        while (selectedObject && !selectedObject.name) {
-            selectedObject = selectedObject.parent;  // Переход к родительскому объекту
-        }
-        if (selectedObject && selectedObject.name) {
-            showInfoPanel(selectedObject.name);  // Отображаем информацию об объекте
-        }
-
-
+    function showInfoPanel(info) {
+        const panel = document.getElementById('infoPanel');
+        panel.textContent = info.replace(/\n/g, '\n');  // Обработка символов переноса строки
+        panel.style.display = 'block';
+        setTimeout(() => panel.style.display = 'none', 10000);  // Скрыть через 10 секунд
     }
-});
 
 
-function onWindowResize() {
-    // Обновляем размеры канваса
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    function createPainting(paintingTextureUrl, frameWidth, frameHeight, frameThickness, frameColor) {
+        const frameMaterial = new THREE.MeshStandardMaterial({ color: frameColor });
 
-    // Обновляем параметры камеры
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix(); // Обновляем матрицу проекции камеры
-}
+        // Горизонтальные части рамки
+        const horizontalFrameGeometry = new THREE.BoxGeometry(frameWidth, frameThickness, frameThickness);
+        const topFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
+        const bottomFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
 
-window.addEventListener('resize', onWindowResize, false);
+        // Вертикальные части рамки
+        const verticalFrameGeometry = new THREE.BoxGeometry(frameThickness, frameHeight, frameThickness);
+        const leftFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
+        const rightFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
+
+        // Позиционирование частей рамки
+        topFrame.position.set(0, frameHeight / 2 + frameThickness / 2, 0);
+        bottomFrame.position.set(0, -frameHeight / 2 - frameThickness / 2, 0);
+        leftFrame.position.set(-frameWidth / 2 - frameThickness / 2, 0, 0);
+        rightFrame.position.set(frameWidth / 2 + frameThickness / 2, 0, 0);
+
+        // Картина
+        const paintingTexture = new THREE.TextureLoader().load(paintingTextureUrl);
+        const paintingMaterial = new THREE.MeshStandardMaterial({ map: paintingTexture });
+        const paintingGeometry = new THREE.PlaneGeometry(frameWidth, frameHeight);
+        const painting = new THREE.Mesh(paintingGeometry, paintingMaterial);
+        painting.position.set(0, 0, frameThickness / 4);
+
+        // Группа для рамки и картины
+        const frameGroup = new THREE.Group();
+        frameGroup.add(topFrame, bottomFrame, leftFrame, rightFrame, painting);
+
+        return frameGroup;
+    }
+
+    function createDoor() {
+        const geometry_glass = new THREE.PlaneGeometry(2, 2.5);  // Размер стекла
+        const material_glass = new THREE.MeshStandardMaterial({
+            color: 0x00ff00,  // Зеленый цвет
+            opacity: 0.3,  // Полупрозрачность
+            transparent: true  // Включаем поддержку прозрачности
+        });
+        const glass = new THREE.Mesh(geometry_glass, material_glass);
+        const glass1 = new THREE.Mesh(geometry_glass, material_glass);
+        glass.position.set(0, 1.25, 0.025);
+        glass1.position.set(0, 1.25, -0.025);
+        glass1.rotation.y = Math.PI;
+
+
+        // Создание рамки двери
+        const frameMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+
+        const horizontalFrameGeometry = new THREE.BoxGeometry(2, 0.1, 0.1);
+        const topFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
+        const bottomFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
+        topFrame.position.set(0, 2.45, 0);
+        bottomFrame.position.set(0, 0.05, 0);
+
+        const verticalFrameGeometry = new THREE.BoxGeometry(0.1, 2.5, 0.1);
+        const leftFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
+        const rightFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
+        leftFrame.position.set(-1, 1.25, 0);
+        rightFrame.position.set(1, 1.25, 0);
+
+        // Группировка стекла и рамки
+        const doorGroup = new THREE.Group();
+        doorGroup.add(glass, glass1, topFrame, bottomFrame, leftFrame, rightFrame);
+        scene.add(doorGroup);
+
+        doorGroup.position.x = -1;
+        return doorGroup;
+    }
+
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'o') 
+        {
+            isDoorOpen = !isDoorOpen;
+            if (isDoorOpen) soundOpen.play();
+            else soundClose.play();
+        }
+    });
+
+    window.addEventListener('click', (event) => {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(scene.children, true);  // true для поиска во вложенных объектах
+
+        if (intersects.length > 0) {
+            let selectedObject = intersects[0].object;
+
+            // Поиск имени объекта в иерархии
+            while (selectedObject && !selectedObject.name) {
+                selectedObject = selectedObject.parent;  // Переход к родительскому объекту
+            }
+            if (selectedObject && selectedObject.name) {
+                showInfoPanel(selectedObject.name);  // Отображаем информацию об объекте
+            }
+
+
+        }
+    });
+
+
+    function onWindowResize() {
+        // Обновляем размеры канваса
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Обновляем параметры камеры
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix(); // Обновляем матрицу проекции камеры
+    }
+
+    window.addEventListener('resize', onWindowResize, false);
 }
 
 
