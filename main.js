@@ -5,6 +5,8 @@ import { FlyControls } from 'three/addons/controls/FlyControls.js';
 
 
 
+
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
@@ -13,7 +15,7 @@ document.body.appendChild(renderer.domElement);
 
 // Создание геометрии и материала для объектов
 
-
+camera.position.set(0,0,5);
 
 const texture_floor = new THREE.TextureLoader().load('img/Floor.jpg');
 texture_floor.repeat.set( 3,5); // powtarzanie tekstury 
@@ -181,11 +183,17 @@ for (var i=0; i<tabNazwa.length; i++)
 
 const door = createDoor();
 door.position.z=0.5;
-door.position.x-=0.05;
-
 const door1 = createDoor();
 door1.position.z=0.5;
-door1.position.x-=-1.95;
+door1.position.x-=-2;
+
+
+let isDoorOpen = false;  // Состояние двери
+let doorPosition = -1;
+
+
+
+
 
 
 
@@ -246,8 +254,8 @@ function colision(){
         else camera.position.z-=1;
     }
     
-
-
+    if (!isDoorOpen && camera.position.z<0.9 && camera.position.z>0)  camera.position.z+=1;
+    if (!isDoorOpen && camera.position.z>-0.6 && camera.position.z<0)  camera.position.z-=0.5;
 }
 
 
@@ -257,7 +265,19 @@ function colision(){
 function animate() {
     requestAnimationFrame(animate);
 
-    console.log("Позиция камеры:", camera.position);
+    if(isDoorOpen)
+    {
+        if(doorPosition>-3) doorPosition-=0.05;
+    }
+    else 
+    {
+        if(doorPosition<-1) doorPosition+=0.05;
+    }
+    
+    door.position.x=doorPosition;
+    door1.position.x=doorPosition*(-1);
+
+    console.log(camera.position);
    
     colision();
 
@@ -323,6 +343,8 @@ const material_glass = new THREE.MeshBasicMaterial({
 const glass = new THREE.Mesh(geometry_glass, material_glass);
 const glass1 = new THREE.Mesh(geometry_glass, material_glass);
 glass.position.set(0, 1.25, 0.025);
+glass1.position.set(0, 1.25, -0.025);
+glass1.rotation.y=Math.PI;
 
 
 // Создание рамки двери
@@ -342,15 +364,16 @@ rightFrame.position.set(1, 1.25, 0);
 
 // Группировка стекла и рамки
 const doorGroup = new THREE.Group();
-doorGroup.add(glass, topFrame, bottomFrame, leftFrame, rightFrame);
+doorGroup.add(glass,glass1, topFrame, bottomFrame, leftFrame, rightFrame);
 scene.add(doorGroup);
 
 doorGroup.position.x = -1;
 return doorGroup;
 }
 
-
-
+window.addEventListener('keydown', (event) =>{
+    if (event.key === 'o') isDoorOpen=!isDoorOpen ;
+});
 
 window.addEventListener('click', (event) => {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -366,7 +389,6 @@ window.addEventListener('click', (event) => {
         while (selectedObject && !selectedObject.name) {
             selectedObject = selectedObject.parent;  // Переход к родительскому объекту
         }
-
         if (selectedObject && selectedObject.name) {
             showInfoPanel(selectedObject.name);  // Отображаем информацию об объекте
         }
