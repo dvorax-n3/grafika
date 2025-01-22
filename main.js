@@ -94,25 +94,68 @@ wall6.position.x=9.5;
 var tabNazwa=['img/mola__lisa.jpg',
               'img/time.jpg',
               'img/The_Last_Supper.jpg',
-              'img/girl.jpg'];
+              'img/girl.jpg',
+              'img/venere.jpg',
+              'img/night.jpg',
+              'img/madona.jpg',
+              'img/pompeja.jpg',
+              'img/america.jpg',
+              'img/wojna.jpg',
+              'img/kiss.jpg',
+              'img/square.png',
+              'img/krzyk.jpg',
+              'img/babylon.jpg'
+            ];
 
-var tabOpis=['Mona Lisa \n Autor: Leonardo da Vinci \n Data powstania: 1503–1507',
+var tabOpis=['Mona Lisa \n Autor: Leonardo da Vinci \n Data powstania: ok. 1503–1507',
              'Trwałość pamięci \n Autor: Salvador Dalí \n Data powstania: 1931',
-             'Ostatnia Wieczerza \n Autor: Leonardo da Vinci \n Data powstania: 1495–1498',
-             'Dziewczyna z perłą \n Autor: Jan Vermeer \n Data powstania: ok. 1665 – 1667'];
+             'Ostatnia Wieczerza \n Autor: Leonardo da Vinci \n Data powstania: ok. 1495–1498',
+             'Dziewczyna z perłą \n Autor: Jan Vermeer \n Data powstania: ok. 1665 – 1667',
+             'Narodziny Wenus \n Autor: Sandro Botticelli \n Data powstania: ok. 1485',
+             'Gwiaździsta noc \n Autor: Vincent van Gogh \n Data powstania: 1889',
+             'Madonna Sykstyńska \n Autor: Rafael Santi\n Data powstania: ok. 1513–1514',
+             'Ostatni Dzien Pompei \n Autor: Karl Bryullov\n Data powstania: ok. 1830–1833',
+             'American Gothic \n Autor: Grant Wood\n Data powstania: 1930',
+             'Apoteoza wojny \n Autor: Wasilij Wierieszczagin\n Data powstania: 1871',
+             'Pocałunek \n Autor: Gustav Klimt\n Data powstania: 1907–1908',
+             'Czarny kwadrat na białym tle \n Autor: Kazimierz Malewicz\n Data powstania: 1914–1915',
+             'Krzyk \n Autor: Edvard Munch\n Data powstania: 1893',
+             'Wieża Babel \n Autor: Pieter Bruegel\n Data powstania: 1563'
+            ];
 
 var tabRozmiar=[
                [2,3],
                [3,2],
                [4,2],
-               [2,3]
+               [2,3],
+               [4,2],
+               [2.5,2],
+               [2,3.5],
+               [5,3],
+               [1.5,2],
+               [3,2],
+               [2,2],
+               [2,2],
+               [1.5,2],
+               [4,2.5]
 ];
 
 var tabPostion=[
                [0, 3, 17.5,Math.PI],
                [10, 3, 17.5,Math.PI],
                [-10, 3, 17.5,Math.PI],
-               [-14.5, 3, 12,Math.PI/2]
+               [-14.5, 3, 14,Math.PI/2],
+               [-14.5, 3, 6,Math.PI/2],
+               [14.5, 3, 14,-Math.PI/2],
+               [14.5, 3.5, 6,-Math.PI/2],
+               [0, 3, -17.5,0],
+               [10, 3, -17.5,0],
+               [-10, 3, -17.5,0],
+               [-14.5, 3, -14,Math.PI/2],
+               [-14.5, 3, -6,Math.PI/2],
+               [14.5, 3, -14,-Math.PI/2],
+               [14.5, 3, -6,-Math.PI/2]
+
 ];
 
 const tabPainting = [];
@@ -278,7 +321,9 @@ const material_glass = new THREE.MeshBasicMaterial({
     transparent: true  // Включаем поддержку прозрачности
 });
 const glass = new THREE.Mesh(geometry_glass, material_glass);
-glass.position.set(0, 1.25, 0);
+const glass1 = new THREE.Mesh(geometry_glass, material_glass);
+glass.position.set(0, 1.25, 0.025);
+
 
 // Создание рамки двери
 const frameMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
