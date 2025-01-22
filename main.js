@@ -6,8 +6,8 @@ const startScreen = document.getElementById('startScreen');
 const startButton = document.getElementById('startButton');
 
 startButton.addEventListener('click', () => {
-    startScreen.style.display = 'none';  // Скрываем экран старта
-    museum();  // Запускаем сцену
+    startScreen.style.display = 'none';  
+    museum();  
 });
 
 
@@ -22,8 +22,9 @@ function museum() {
   
 
     camera.position.set(0, 0, 5);
+    //звуки
     const listener = new THREE.AudioListener();
-    camera.add(listener);  // Добавление слушателя к камере
+    camera.add(listener);  
 
     const soundOpen = new THREE.Audio(listener);
     const soundClose = new THREE.Audio(listener);
@@ -141,12 +142,7 @@ function museum() {
 
 
 
-
-    // Создание стеклянной части двери
-
-
-
-
+//создание картины
     var tabNazwa = ['img/mola__lisa.jpg',
         'img/time.jpg',
         'img/The_Last_Supper.jpg',
@@ -235,9 +231,11 @@ function museum() {
     door1.position.x -= -2;
 
 
-    let isDoorOpen = false;  // Состояние двери
+    let isDoorOpen = false;  
     let doorPosition = -1;
 
+
+//свет
 
     const tabLightPictures = [];
 
@@ -341,7 +339,7 @@ function museum() {
 
 
 
-    // Функция анимации
+    
     function animate() {
         requestAnimationFrame(animate);
 
@@ -361,7 +359,7 @@ function museum() {
 
         controls.update(0.1);
 
-        // Обновление рендера
+       
         renderer.render(scene, camera);
     }
 
@@ -377,7 +375,7 @@ function museum() {
         const panel = document.getElementById('infoPanel');
         panel.textContent = info.replace(/\n/g, '\n');  // Обработка символов переноса строки
         panel.style.display = 'block';
-        setTimeout(() => panel.style.display = 'none', 10000);  // Скрыть через 10 секунд
+        setTimeout(() => panel.style.display = 'none', 10000); 
     }
 
 
@@ -385,7 +383,7 @@ function museum() {
         const frameMaterial = new THREE.MeshStandardMaterial({ color: frameColor });
 
         // Горизонтальные части рамки
-        const horizontalFrameGeometry = new THREE.BoxGeometry(frameWidth, frameThickness, frameThickness);
+        const horizontalFrameGeometry = new THREE.BoxGeometry(frameWidth+frameThickness, frameThickness, frameThickness);
         const topFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
         const bottomFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
 
@@ -395,10 +393,10 @@ function museum() {
         const rightFrame = new THREE.Mesh(verticalFrameGeometry, frameMaterial);
 
         // Позиционирование частей рамки
-        topFrame.position.set(0, frameHeight / 2 + frameThickness / 2, 0);
-        bottomFrame.position.set(0, -frameHeight / 2 - frameThickness / 2, 0);
-        leftFrame.position.set(-frameWidth / 2 - frameThickness / 2, 0, 0);
-        rightFrame.position.set(frameWidth / 2 + frameThickness / 2, 0, 0);
+        topFrame.position.set(0, frameHeight / 2, 0);
+        bottomFrame.position.set(0, -frameHeight / 2 , 0);
+        leftFrame.position.set(-frameWidth / 2 , 0, 0);
+        rightFrame.position.set(frameWidth / 2  , 0, 0);
 
         // Картина
         const paintingTexture = new THREE.TextureLoader().load(paintingTextureUrl);
