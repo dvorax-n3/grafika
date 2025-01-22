@@ -18,7 +18,7 @@ document.body.appendChild(renderer.domElement);
 camera.position.set(0,0,5);
 
 const texture_floor = new THREE.TextureLoader().load('img/Floor.jpg');
-texture_floor.repeat.set( 3,5); // powtarzanie tekstury 
+texture_floor.repeat.set( 10,7); // powtarzanie tekstury 
 texture_floor.wrapS = THREE.RepeatWrapping; // rysowanie tekstury od poczatku
 texture_floor.wrapT = THREE.RepeatWrapping; 
 texture_floor.anisotropy = 16;  
@@ -28,14 +28,26 @@ const ground = new THREE.Mesh(geometry, material);
 scene.add(ground);
 ground.rotation.x = -Math.PI / 2;
 
-const texture_wall = new THREE.TextureLoader().load('img/wall1.jpg');
+
+const texture_roof = new THREE.TextureLoader().load('img/roof.png');
+texture_roof.repeat.set( 30,21); // powtarzanie tekstury 
+texture_roof.wrapS = THREE.RepeatWrapping; // rysowanie tekstury od poczatku
+texture_roof.wrapT = THREE.RepeatWrapping; 
+texture_roof.anisotropy = 16; 
+const material_roof = new THREE.MeshStandardMaterial({ map: texture_roof });
+const roof = new THREE.Mesh(geometry, material_roof);
+roof.rotation.x = Math.PI / 2;
+roof.position.y=7;
+scene.add(roof);
+
+const texture_wall = new THREE.TextureLoader().load('img/wall2.jpg');
 texture_wall.repeat.set( 3,1); // powtarzanie tekstury 
 texture_wall.wrapS = THREE.RepeatWrapping; // rysowanie tekstury od poczatku
 texture_wall.wrapT = THREE.RepeatWrapping; 
 texture_wall.anisotropy = 16;
 
 const wall_geometry = new THREE.BoxGeometry(50,7,1);
-const wall_materials = new THREE.MeshBasicMaterial({map: texture_wall});
+const wall_materials = new THREE.MeshStandardMaterial({map: texture_wall});
 const wall = new THREE.Mesh(wall_geometry,wall_materials);
 scene.add(wall);
 wall.position.y=3.5;
@@ -66,7 +78,13 @@ wall3.name = 'wall 3';
 
 
 const wall_geometry1 = new THREE.BoxGeometry(15,2.5,1);
-const wall_materials1 = new THREE.MeshBasicMaterial({map: texture_wall});
+const texture_wall1 = new THREE.TextureLoader().load('img/wall2.jpg');
+texture_wall1.repeat.set( 1,0); // powtarzanie tekstury 
+texture_wall1.wrapS = THREE.RepeatWrapping; // rysowanie tekstury od poczatku
+texture_wall1.wrapT = THREE.RepeatWrapping; 
+texture_wall1.anisotropy = 16;
+const wall_materials1 = new THREE.MeshStandardMaterial({map: texture_wall1});
+
 
 
 const wall4 = new THREE.Mesh(wall_geometry1,wall_materials1);
@@ -209,19 +227,77 @@ let doorPosition = -1;
 
 
 
+// const spotlight = new THREE.SpotLight(0xffffff, 400, 10, Math.PI / 6, 0.9, 2);
+// spotlight.position.set(7.25, 6, 5.5);  // Позиция прожектора
+// spotlight.target.position.set(14.5, 3, 6);  // Точка, на которую направлен свет (целевой объект)
+
+// scene.add(spotlight);  // Добавляем прожектор в сцену
+// scene.add(spotlight.target);  // Добавляем цель в сцену
+
+
+
+const tabLightPictures=[];
+
+ for (var i=0; i<tabPostion.length; i++)
+ {
+    var x = tabPostion[i][0];
+    var y = tabPostion[i][1];
+    var z = tabPostion[i][2];
+    tabLightPictures[i] = new THREE.SpotLight(0xffffff, 300, 15, Math.PI / 6, 0.9, 2);
+    if (x == 10 || x == -10 || x == 0)  tabLightPictures[i].position.set(x,y/2,z/2);
+    else tabLightPictures[i].position.set(x/2,y/2,z);
+    tabLightPictures[i].target.position.set(x, y, z);
+    scene.add(tabLightPictures[i]);
+    scene.add(tabLightPictures[i].target);
+ }
+
+ const tabLight = [];
+
+
+ 
+    tabLight[0] = new THREE.SpotLight(0xffffff, 10, 15, Math.PI / 2, 0.9, 2);
+    tabLight[0].position.set(-7, 6, 8);
+    tabLight[0].target.position.set(-7, 0, 8);
+    scene.add(tabLight[0]);
+    scene.add(tabLight[0].target);
+
+    tabLight[1] = new THREE.SpotLight(0xffffff, 10, 15, Math.PI / 2, 0.9, 2);
+    tabLight[1].position.set(7, 6, 8);
+    tabLight[1].target.position.set(7, 0, 8);
+    scene.add(tabLight[1]);
+    scene.add(tabLight[1].target);
+
+    tabLight[2] = new THREE.SpotLight(0xffffff, 10, 15, Math.PI / 2, 0.9, 2);
+    tabLight[2].position.set(-7, 6, -8);
+    tabLight[2].target.position.set(-7, 0, -8);
+    scene.add(tabLight[2]);
+    scene.add(tabLight[2].target);
+
+    tabLight[3] = new THREE.SpotLight(0xffffff, 10, 15, Math.PI / 2, 0.9, 2);
+    tabLight[3].position.set(7, 6, -8);
+    tabLight[3].target.position.set(7, 0, -8);
+    scene.add(tabLight[3]);
+    scene.add(tabLight[3].target);
+
+    tabLight[4] = new THREE.SpotLight(0xffffff, 60, 15, Math.PI / 5, 0.9, 2);
+    tabLight[4].position.set(0, 6, 8);
+    tabLight[4].target.position.set(0, 1.6, 1.5);
+    scene.add(tabLight[4]);
+    scene.add(tabLight[4].target);
+
+    tabLight[5] = new THREE.SpotLight(0xffffff, 60, 15, Math.PI / 5, 0.9, 2);
+    tabLight[5].position.set(0, 6, -8);
+    tabLight[5].target.position.set(0, 1.6, -1.5);
+    scene.add(tabLight[5]);
+    scene.add(tabLight[5].target);
+
+
+ 
+ 
 
 
 
 
-
-const pointLight = new THREE.PointLight(0xffffff, 100, 1000);  // Цвет, интенсивность, дальность
-pointLight.position.set(0, 7 , 0);  // Позиция света
-scene.add(pointLight);
-
-
-
-const gridHelper = new THREE.GridHelper(100, 100); // 20 - размер, 20 - количество делений
-scene.add(gridHelper);
 
 
 
@@ -301,7 +377,7 @@ function showInfoPanel(info) {
 
 
 function createFramedPainting(paintingTextureUrl, frameWidth, frameHeight, frameThickness, frameColor) {
-    const frameMaterial = new THREE.MeshBasicMaterial({ color: frameColor });
+    const frameMaterial = new THREE.MeshStandardMaterial({ color: frameColor });
     
     // Горизонтальные части рамки
     const horizontalFrameGeometry = new THREE.BoxGeometry(frameWidth + frameThickness, frameThickness, frameThickness);
@@ -321,7 +397,7 @@ function createFramedPainting(paintingTextureUrl, frameWidth, frameHeight, frame
 
     // Картина
     const paintingTexture = new THREE.TextureLoader().load(paintingTextureUrl);
-    const paintingMaterial = new THREE.MeshBasicMaterial({ map: paintingTexture });
+    const paintingMaterial = new THREE.MeshStandardMaterial({ map: paintingTexture });
     const paintingGeometry = new THREE.PlaneGeometry(frameWidth, frameHeight);
     const painting = new THREE.Mesh(paintingGeometry, paintingMaterial);
     painting.position.set(0, 0, frameThickness / 2);
@@ -335,7 +411,7 @@ function createFramedPainting(paintingTextureUrl, frameWidth, frameHeight, frame
 
 function createDoor(){
     const geometry_glass = new THREE.PlaneGeometry(2, 2.5);  // Размер стекла
-const material_glass = new THREE.MeshBasicMaterial({
+const material_glass = new THREE.MeshStandardMaterial({
     color: 0x00ff00,  // Зеленый цвет
     opacity: 0.3,  // Полупрозрачность
     transparent: true  // Включаем поддержку прозрачности
@@ -348,7 +424,7 @@ glass1.rotation.y=Math.PI;
 
 
 // Создание рамки двери
-const frameMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+const frameMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
 const horizontalFrameGeometry = new THREE.BoxGeometry(2, 0.1, 0.1);
 const topFrame = new THREE.Mesh(horizontalFrameGeometry, frameMaterial);
