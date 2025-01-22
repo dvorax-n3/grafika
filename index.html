@@ -1,35 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>First Person Camera</title>
+    <title>Wirtualny muzeum sztuki </title>
     <style>
-        body { margin: 0; overflow: hidden; }
-        /* canvas { display: block; } */
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
     </style>
     <style>
-  #infoPanel {
-    position: fixed;  /* Закрепляем панель */
-    bottom: 10px;     /* Располагаем панель снизу */
-    left: 10px;       /* Смещаем влево */
-    max-width: 300px; /* Ограничиваем ширину */
-    white-space: pre-line;  /* Сохраняем переносы строк */
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.7);  /* Полупрозрачный фон */
-    color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-}
-      </style>
-      <div id="infoPanel"></div>
+        #startScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+           
+        }
+
+        #title {
+            font-size: 48px;
+            margin-bottom: 20px;
+           
+        }
+
+        #title2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+           
+        }
+
+
+
+        #description {
+            font-size: 18px;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        #startButton {
+            padding: 20px 40px;
+            font-size: 24px;
+            color: white;
+            background-color: #3a3a3a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #infoPanel {
+            position: fixed;
+            /* Закрепляем панель */
+            bottom: 10px;
+            /* Располагаем панель снизу */
+            left: 10px;
+            /* Смещаем влево */
+            max-width: 300px;
+            /* Ограничиваем ширину */
+            white-space: pre-line;
+            /* Сохраняем переносы строк */
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Полупрозрачный фон */
+            color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <div id="infoPanel"></div>
 </head>
+
 <body>
-    <script src="https://raw.githubusercontent.com/evanw/csg.js/master/csg.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <div id="startScreen">
+        <div id="title">Witamy w wirtualnym muzeum!</div>
+        <div id="title2">sterowanie</div>
+        <div id="description">
+            WASD - chodzenie<br>
+            Myszka - sterowanie kamerą<br>
+            LPM - informacje o obrazie<br>
+            O - otwieranie drzwi
+        </div>
+        <button id="startButton">wejdź do Muzeum</button>
+    </div>
+
 
     <script type="module" src="main.js"></script>
 
 </body>
+
 </html>
