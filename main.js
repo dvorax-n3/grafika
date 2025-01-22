@@ -91,6 +91,41 @@ wall6.position.x=9.5;
 
 
 
+var tabNazwa=['img/mola__lisa.jpg',
+              'img/time.jpg',
+              'img/The_Last_Supper.jpg',
+              'img/girl.jpg'];
+
+var tabOpis=['Mona Lisa \n Autor: Leonardo da Vinci \n Data powstania: 1503–1507',
+             'Trwałość pamięci \n Autor: Salvador Dalí \n Data powstania: 1931',
+             'Ostatnia Wieczerza \n Autor: Leonardo da Vinci \n Data powstania: 1495–1498',
+             'Dziewczyna z perłą \n Autor: Jan Vermeer \n Data powstania: ok. 1665 – 1667'];
+
+var tabRozmiar=[
+               [2,3],
+               [3,2],
+               [4,2],
+               [2,3]
+];
+
+var tabPostion=[
+               [0, 3, 17.5,Math.PI],
+               [10, 3, 17.5,Math.PI],
+               [-10, 3, 17.5,Math.PI],
+               [-14.5, 3, 12,Math.PI/2]
+];
+
+const tabPainting = [];
+
+for (var i=0; i<tabNazwa.length; i++)
+{
+    tabPainting[i]=createFramedPainting(tabNazwa[i], tabRozmiar[i][0], tabRozmiar[i][1], 0.1, 0x8B4513);
+    tabPainting[i].position.set(tabPostion[i][0],tabPostion[i][1],tabPostion[i][2]);
+    tabPainting[i].rotation.y=tabPostion[i][3];
+    tabPainting[i].scale.set(1.5,1.5,1);
+    tabPainting[i].name=tabOpis[i];
+    scene.add(tabPainting[i]);
+}
 
 
 
@@ -99,13 +134,6 @@ wall6.position.x=9.5;
 
 
 
-const mona_lisa = createFramedPainting('img/mola__lisa.jpg', 2, 3, 0.1, 0x8B4513);
-mona_lisa.position.set(0, 3, 17.5);  // Устанавливаем позицию
-mona_lisa.rotation.y=Math.PI;
-mona_lisa.scale.set(1.5,1.5,1);
-
-scene.add(mona_lisa);  // Добавляем в сцену
-mona_lisa.name='Mona Lisa \n Autor: Leonardo da Vinci \n Data powstania	1503–1507';
 
 
 const door = createDoor();
